@@ -23,17 +23,17 @@ functions{
 data {
 	int N;
 	int J; //number of non sensitive item
-	int<lower = 0> Y[N]; // number of affirmative answers
+	array[N] int<lower = 0> Y; // number of affirmative answers
 	int K;
 	matrix[N,K] X;
-	int treat[N];
-	int direct[N];
-	real mu_psi0[K];
-	real<lower = 0> sigma_psi0[K];
-	real mu_delta[K];
-	real<lower = 0> sigma_delta[K];
-	real mu_gamma0[K];
-	real<lower = 0> sigma_gamma0[K];
+	array[N] int treat;
+	array[N] int direct;
+	array[K] real mu_psi0;
+	array[K] real<lower = 0> sigma_psi0;
+	array[K] real mu_delta;
+	array[K] real<lower = 0> sigma_delta;
+	array[K] real mu_gamma0;
+	array[K] real<lower = 0> sigma_gamma0;
 	real mu_treate;
 	real<lower = 0> sigma_treate;
 	real mu_ue;
@@ -85,7 +85,7 @@ model{
 		} else if (treat[i] == 1 && direct[i] == 1 && Y[i] > 0){
 			target += log(1 - exp(jd(inv_logit(X[i,] * gamma0 + treat_e)))) + gd(inv_logit(X[i,] * delta)) + h1d(Y[i] - 1,J,inv_logit(X[i,]*psi0 + Z_e)*(1 - rho0)/rho0, (1 - inv_logit(X[i,]*psi0 + Z_e))*(1 - rho0)/rho0);
 		} else {
-			target += 1;
+			reject("Invalid treatment, direct response, or list count at observation ", i);
 		}
 			
 			
