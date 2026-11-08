@@ -142,7 +142,7 @@ data(srilanka)
 # Model 1: intercept-only outcome model without prior information:
 mod1 <- bayeslist(sexassault ~ 1, data = srilanka, treat = "treatment", J = 3,
 type = "outcome", nsim = 200, thin = 1, CIsize = 0.95, nchain = 1,
-seeds = 342321, prior = NULL, parallel = TRUE)
+seeds = 342321, prior = NULL, parallel = FALSE)
 summary(mod1) # summary of estimates
 predict(mod1) # predicted prevalence for each observation
 plot(mod1,"trace") # trace plot
@@ -153,7 +153,7 @@ plot(mod1, only_prev = TRUE) # prevalence plot
 # Model 2: multivariate outcome model without prior information:
 mod2 <- bayeslist(sexassault ~ age + edu, data = srilanka, treat = "treatment", J = 3,
 type = "outcome", nsim = 200, thin = 1, CIsize = 0.95, nchain = 1,
-seeds = 342321, prior = NULL, parallel = TRUE)
+seeds = 342321, prior = NULL, parallel = FALSE)
 summary(mod2) # summary of estimates
 predict(mod2) # predicted prevalence for each observation
 plot(mod2,"trace") # trace plot
@@ -165,7 +165,7 @@ plot(mod2) # prevalence + coefficient plot
 a <- 38; b <-146
 mod3 <- bayeslist(sexassault ~ 1, data = srilanka, treat = "treatment", J = 3,
 type = "outcome", nsim = 200, thin = 1, CIsize = 0.95, nchain = 1,
-seeds = 342321, prior = "BL", BL_a = a, BL_b = b,, parallel = TRUE)
+seeds = 342321, prior = "BL", BL_a = a, BL_b = b, parallel = FALSE)
 summary(mod3)
 predict(mod3)
 plot(mod3,"trace")
@@ -177,7 +177,7 @@ plot(mod3, only_prev = TRUE)
 data(london)
 mod4 <- bayeslist(listCount ~ agegrp + gender + social_grade + qual,data = london, J = 4,
 treat = "listTreat", seeds = 4597, nsim = 200, nchain = 1,
-prior = "direct_item", direct_item = "baselineTurnout")
+prior = "direct_item", direct_item = "baselineTurnout", parallel = FALSE)
 summary(mod4)
 predict(mod4)
 plot(mod4,"trace")

@@ -42,10 +42,12 @@
 #' @examples
 #'
 #' \donttest{
-#'  mod1 <- bayesICT(sexassault ~ 1, data = srilanka, treat = "treatment", J = 3, type = "outcome",
-#'      nsim = 200, thin = 1, CIsize = 0.95, nchain = 2, seeds = 342321, prior = NULL)
+#'  data(srilanka)
+#'  mod1 <- bayesICT(sexassault ~ 1, data = srilanka, treat = "treatment",
+#'                    J = 3, type = "outcome", nsim = 100, warmup = 50,
+#'                    nchain = 1, parallel = 1, seeds = 342321, prior = NULL)
 #'
-#'  log1 = log_lik(mod1)
+#'  log1 <- log_lik(mod1)
 #'  log1
 #' }
 #'

@@ -171,6 +171,7 @@ plot_prevalence.bayesICT <- function(object, covariate_names = NULL,
 #' @param ... Additional arguments passed to rstan::traceplot().
 #'
 #' @return A ggplot object.
+#' @importFrom rlang .data
 #' @export
 plot_trace.bayesICT <- function(object, main = "", pars = NULL,
                                 label = TRUE, ...) {
@@ -190,7 +191,8 @@ plot_trace.bayesICT <- function(object, main = "", pars = NULL,
   dat <- bayesICT_plot_trace_data(arr, par_info, object, label = label)
 
   ## One facet per parameter, with chains overlaid within each facet.
-  p <- ggplot2::ggplot(dat, ggplot2::aes(x = iteration, y = value, group = chain)) +
+  p <- ggplot2::ggplot(dat, ggplot2::aes(x = .data$iteration, y = .data$value,
+                                       group = .data$chain)) +
     ggplot2::geom_line(linewidth = 0.25, alpha = 0.75) +
     ggplot2::facet_wrap(stats::as.formula("~ parameter"), scales = "free_y") +
     ggplot2::labs(x = "Iteration", y = "Value") +
@@ -208,7 +210,9 @@ plot_trace.bayesICT <- function(object, main = "", pars = NULL,
 #'   log_lik and lp__ are plotted.
 #' @param label If TRUE, try to replace Stan parameter names in the returned
 #'   ggplot object by the same human-readable labels used by coef.bayesICT().
-#' @param ... Additional arguments passed to rstan::plot().
+#' @param ci_level Probability content of the inner credible interval.
+#' @param outer_level Probability content of the outer credible interval.
+#' @param ... Additional arguments; currently unused.
 #'
 #' @return A ggplot object.
 #' @export
@@ -228,10 +232,13 @@ plot_coef.bayesICT <- function(object, main = "", pars = NULL,
 
   ## Draw outer and inner posterior intervals horizontally, centered at the
   ## posterior median, with a zero reference line for regression parameters.
-  p <- ggplot2::ggplot(dat, ggplot2::aes(y = parameter, x = median)) +
-    ggplot2::geom_linerange(ggplot2::aes(xmin = outer_low, xmax = outer_high),
+  p <- ggplot2::ggplot(dat, ggplot2::aes(y = .data$parameter,
+                                       x = .data$median)) +
+    ggplot2::geom_linerange(ggplot2::aes(xmin = .data$outer_low,
+                                       xmax = .data$outer_high),
                             linewidth = 0.4, alpha = 0.55) +
-    ggplot2::geom_linerange(ggplot2::aes(xmin = inner_low, xmax = inner_high),
+    ggplot2::geom_linerange(ggplot2::aes(xmin = .data$inner_low,
+                                       xmax = .data$inner_high),
                             linewidth = 1.2, alpha = 0.85) +
     ggplot2::geom_point(size = 1.7) +
     ggplot2::geom_vline(xintercept = 0, linetype = 2, linewidth = 0.25) +
